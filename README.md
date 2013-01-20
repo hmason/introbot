@@ -3,6 +3,8 @@ introbot
 
 Introbot is a quick python script to write an introductory e-mail between n parties.
 
+To use, edit `settings.py` and swap in your info.
+
 add a person
 ------------
 
