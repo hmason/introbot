@@ -6,7 +6,7 @@ from optparse import OptionParser
 import settings
 
 def load_people(filename="people.csv"):
-    r = csv.reader(open(filename))
+    r = csv.reader(open(filename,'ra'))
     people = {}
     for person in r:
         people[person[0]] = [person[1], person[2]]
