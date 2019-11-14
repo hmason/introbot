@@ -7,17 +7,18 @@ import settings
 
 
 def load_people(filename="people.csv"):
-    r = csv.reader(open(filename, 'ra'))
-    people = {}
-    for person in r:
-        people[person[0]] = [person[1], person[2]]
-        if not person[1]:
-            people[person[0]][0] = person[0].title()
-    return people
+    parsed_people = {}
+    with open(filename) as r:
+        people = csv.reader(r)
+        for person in people:
+            parsed_people[person[0]] = [person[1], person[2]]
+            if not person[1]:
+                parsed_people[person[0]][0] = person[0].title()
+    return parsed_people
 
 
 def save_person(nick, desc, name=None, filename="people.csv"):
-    with open(filename, 'ab') as csvfile:
+    with open(filename, 'a') as csvfile:
         w = csv.writer(csvfile)
         w.writerow([nick, name, desc])
 
@@ -46,7 +47,11 @@ if __name__ == '__main__':
             save_person(args[0], args[2], args[1])
 
     else:  # write the intro
-        people = load_people()
+        try:
+            people = load_people()
+        except(FileNotFoundError):
+            print("No people!")
+            sys.exit()
 
         introducing = {}  # get the people data from the set
         for person in args:
@@ -59,4 +64,4 @@ if __name__ == '__main__':
         msg = write_introduction(introducing, options.message)
         print(msg)
         p = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)
-        p.stdin.write(msg)
+        p.communicate(msg.encode('utf-8'))
